@@ -1,0 +1,15 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %} Islamic Book Details {% endblock title %}
+
+{% block content %}
+    <a href="{% url 'books.list_books' %}">Go Back</a>
+    
+    <h1>Book Details</h1>
+    <h2>The Quran: Arabic Text with English Translation</h2>
+    <h2>Author: Various Scholars</h2>
+    <p><strong>The Quran: Arabic Text with English Translation</strong> is a comprehensive resource for understanding Islamic scripture. This edition provides the original Arabic text alongside clear English translations, making it accessible for both beginners and advanced students of Islamic studies.</p>
+    
+    <img src="{% static 'book1.jpg' %}" alt="Islamic Book Cover" width="200" height="200">
+{% endblock content %}
