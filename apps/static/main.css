@@ -1,0 +1,80 @@
+/* تنسيق الروابط الأساسي */
+.qu-link {
+    display: block;
+    padding: 15px;
+    text-align: center;
+    color: white;
+    background-color: #007bff;
+    text-decoration: none;
+    margin-bottom: 10px;
+    width: 300px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+}
+
+/* لون الرابط الذي تم زيارته */
+.qu-link:visited {
+    color: #e0e0e0;
+}
+
+/* لون الرابط عند تمرير الماوس */
+.qu-link:hover {
+    background-color: #0056b3;
+}
+
+/* لون الرابط لحظة الضغط عليه */
+.qu-link:active {
+    background-color: #ff0000;
+}
+/* تنسيق عنوان صفحة Task 2 */
+h1.format-title {
+    color: #2c3e50;
+    text-align: center;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+}
+/* تنسيق عنوان صفحة القوائم Task 3 */
+h1.list-title {
+    color: #d35400;
+    border-bottom: 2px solid #d35400;
+    padding-bottom: 5px;
+    font-family: Arial, sans-serif;
+}
+
+/* تنسيق الخط والتباعد للقوائم */
+ul, ol {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    font-size: 18px;
+}
+/* تنسيق الجداول لـ Task 4 */
+table {
+    border-collapse: collapse;
+    width: 60%;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 10px;
+}
+
+/* تلوين خلفية العناوين في الجدول */
+th {
+    background-color: #f2f2f2;
+}
+
+/* تنسيق عنوان الجدول (Caption) */
+caption {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}

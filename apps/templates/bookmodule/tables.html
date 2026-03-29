@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Task 4: Library Tables</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+</head>
+<body>
+    
+    <div style="text-align: center; margin-top: 20px;">
+        <img src="{% static 'book1.jpg' %}" alt="Islamic Book Image" width="200">
+    </div>
+
+    <table>
+        <caption>Table 1: Table of Books and Their Prices</caption>
+        <thead>
+            <tr>
+                <th>Book Title</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>The Quran (English Translation)</td><td>$15.00</td></tr>
+            <tr><td>Sahih Al-Bukhari</td><td>$25.00</td></tr>
+            <tr><td>Ar-Raheeq Al-Makhtum</td><td>$18.00</td></tr>
+            <tr><td>Seerat-un-Nabi</td><td>$20.00</td></tr>
+            <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>$78.00</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+
+    <table>
+        <caption>Table 2: Library Categories & Details</caption>
+        <thead>
+            <tr>
+                <th colspan="5">Library Book Categories <br> Updated as of 2026</th>
+            </tr>
+            <tr>
+                <th>Category Name</th>
+                <th>Total Books</th>
+                <th>Physical Copies?</th>
+                <th>Digital (PDF)?</th>
+                <th>Borrowing Allowed?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Islamic Studies</th>
+                <td>120</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <th>History & Biography</th>
+                <td>85</td>
+                <td>Yes</td>
+                <td>No</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <th>Science & Tech</th>
+                <td>200</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>No (Reading only)</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
