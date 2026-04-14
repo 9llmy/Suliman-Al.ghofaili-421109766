@@ -1,3 +1,4 @@
+from .models import Book
 from django.shortcuts import render
 
 def index(request):
@@ -43,3 +44,32 @@ def search(request):
         return render(request, 'bookmodule/bookList.html', {'books': newBooks})
     
     return render(request, 'bookmodule/search.html')
+
+def init_db(request):
+    # مسح البيانات القديمة (عشان لو حدثت الصفحة بالغلط ما تتكرر الكتب)
+    Book.objects.all().delete()
+    
+    # إضافة الكتب الإسلامية مع السعر ورقم الطبعة
+    Book.objects.create(title='كتاب الداء والدواء', author='ابن قيم الجوزية', price=50.0, edition=1)
+    Book.objects.create(title='كتاب سير أعلام النبلاء', author='الذهبي', price=150.0, edition=3)
+    Book.objects.create(title='كتاب صحيح البخاري', author='الإمام البخاري', price=120.0, edition=5)
+    
+    return render(request, 'bookmodule/index.html') # نرجعه للصفحة الرئيسية بعد الإضافة
+
+def simple_query(request):
+    # نبحث عن أي كتاب يحتوي عنوانه على كلمة "كتاب"
+    mybooks = Book.objects.filter(title__icontains='كتاب') 
+    return render(request, 'bookmodule/bookList.html', {'books': mybooks})
+
+def complex_query(request):
+    # تطبيق الفلاتر المتعددة لنجلب الكتب المطابقة للشروط
+    mybooks = Book.objects.filter(author__isnull=False) \
+                          .filter(title__icontains='كتاب') \
+                          .filter(edition__gte=2) \
+                          .exclude(price__lte=100)[:10]
+    
+    # إذا لقينا كتب مطابقة للشروط نعرضها، وإذا ما لقينا نرجعه للصفحة الرئيسية
+    if len(mybooks) >= 1:
+        return render(request, 'bookmodule/bookList.html', {'books': mybooks})
+    else:
+        return render(request, 'bookmodule/index.html')
