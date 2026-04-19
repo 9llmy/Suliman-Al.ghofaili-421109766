@@ -1,5 +1,8 @@
 from .models import Book
+from django.db.models import Q
 from django.shortcuts import render
+from django.db.models import Count, Sum, Avg, Max, Min
+from .models import Book, Address, Student
 
 def index(request):
     return render(request, "bookmodule/index.html")
@@ -73,3 +76,62 @@ def complex_query(request):
         return render(request, 'bookmodule/bookList.html', {'books': mybooks})
     else:
         return render(request, 'bookmodule/index.html')
+    
+def task1(request):
+    # جلب الكتب التي سعرها أقل من أو يساوي 80 باستخدام Q
+    mybooks = Book.objects.filter(Q(price__lte=80))
+    # راح نستخدم نفس صفحة العرض حقت اللاب الماضي عشان نوفر وقت
+    return render(request, 'bookmodule/bookList.html', {'books': mybooks})
+
+def task2(request):
+    # ندمج الشروط بـ & (وَ) و | (أَوْ)
+    mybooks = Book.objects.filter(
+        Q(edition__gt=2) & (Q(title__icontains='نبلاء') | Q(author__icontains='البخاري'))
+    )
+    return render(request, 'bookmodule/bookList.html', {'books': mybooks})
+
+def task3(request):
+    # استخدام علامة ~ لنفي الشروط (NOT)
+    mybooks = Book.objects.filter(
+        ~Q(edition__gt=2) & ~(Q(title__icontains='نبلاء') | Q(author__icontains='البخاري'))
+    )
+    return render(request, 'bookmodule/bookList.html', {'books': mybooks})
+
+def task4(request):
+    # جلب جميع الكتب وترتيبها أبجدياً حسب حقل العنوان (title)
+    mybooks = Book.objects.all().order_by('title')
+    return render(request, 'bookmodule/bookList.html', {'books': mybooks})
+
+def task5(request):
+    # حساب الإحصائيات للمكتبة
+    stats = Book.objects.aggregate(
+        total_books=Count('id'),
+        total_price=Sum('price'),
+        avg_price=Avg('price'),
+        max_price=Max('price'),
+        min_price=Min('price')
+    )
+    return render(request, 'bookmodule/task5.html', {'stats': stats})
+
+def init_students(request):
+    # مسح البيانات القديمة لتجنب التكرار
+    Student.objects.all().delete()
+    Address.objects.all().delete()
+    
+    # إضافة مدن
+    riyadh = Address.objects.create(city='الرياض')
+    qassim = Address.objects.create(city='القصيم')
+    
+    # إضافة طلاب وربطهم بالمدن
+    Student.objects.create(name='أحمد', age=20, address=riyadh)
+    Student.objects.create(name='عمر', age=22, address=riyadh)
+    Student.objects.create(name='سالم', age=21, address=qassim)
+    Student.objects.create(name='علي', age=23, address=qassim)
+    Student.objects.create(name='خالد', age=19, address=qassim)
+    
+    return render(request, 'bookmodule/index.html')
+
+def task7(request):
+    # دالة annotate تقوم بجمع المدن وعدّ الطلاب المرتبطين بكل مدينة
+    cities = Address.objects.annotate(student_count=Count('student'))
+    return render(request, 'bookmodule/task7.html', {'cities': cities})

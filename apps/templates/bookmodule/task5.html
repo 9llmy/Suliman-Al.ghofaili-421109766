@@ -1,0 +1,16 @@
+{% extends "layouts/base.html" %}
+{% block title %} Library Statistics {% endblock %}
+
+{% block content %}
+<div style="margin: 20px;">
+    <h2>إحصائيات المكتبة 📊</h2>
+    <hr>
+    <ul style="font-size: 18px; line-height: 2;">
+        <li><strong>إجمالي عدد الكتب:</strong> {{ stats.total_books }} كتب</li>
+        <li><strong>مجموع أسعار الكتب:</strong> {{ stats.total_price }} ريال</li>
+        <li><strong>متوسط أسعار الكتب:</strong> {{ stats.avg_price }} ريال</li>
+        <li><strong>أغلى كتاب بالمكتبة:</strong> {{ stats.max_price }} ريال</li>
+        <li><strong>أرخص كتاب بالمكتبة:</strong> {{ stats.min_price }} ريال</li>
+    </ul>
+</div>
+{% endblock content %}
