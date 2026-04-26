@@ -1,0 +1,14 @@
+{% extends "layouts/base.html" %}
+{% block title %} Publisher Stock {% endblock %}
+
+{% block content %}
+<div style="margin: 20px;">
+    <h2>مخزون دور النشر 🏢</h2>
+    <hr>
+    <ul style="font-size: 18px; line-height: 2;">
+        {% for pub in publishers %}
+            <li><strong>{{ pub.name }} ({{ pub.location }}):</strong> إجمالي مخزون الكتب: {{ pub.total_stock|default:0 }} نسخة</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

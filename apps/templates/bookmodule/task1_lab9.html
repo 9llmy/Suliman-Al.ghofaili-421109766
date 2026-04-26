@@ -1,0 +1,14 @@
+{% extends "layouts/base.html" %}
+{% block title %} Book Availability {% endblock %}
+
+{% block content %}
+<div style="margin: 20px;">
+    <h2>نسبة توفر الكتب 📚</h2>
+    <hr>
+    <ul style="font-size: 18px; line-height: 2;">
+        {% for book in books %}
+            <li><strong>{{ book.title }}</strong>: متوفر بنسبة {{ book.percentage }}% (الكمية: {{ book.quantity }})</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

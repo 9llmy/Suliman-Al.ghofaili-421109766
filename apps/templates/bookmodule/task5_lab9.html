@@ -1,0 +1,16 @@
+{% extends "layouts/base.html" %}
+{% block title %} Highly Rated Books {% endblock %}
+
+{% block content %}
+<div style="margin: 20px;">
+    <h2>دور النشر والكتب الأعلى تقييماً ⭐️</h2>
+    <hr>
+    <ul style="font-size: 18px; line-height: 2;">
+        {% for pub in publishers %}
+            <li><strong>{{ pub.name }}</strong>: يمتلك عدد ({{ pub.book_count }}) كتب بتقييم عالي.</li>
+        {% empty %}
+            <li>لا يوجد كتب بتقييم عالي حالياً.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

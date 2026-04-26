@@ -1,0 +1,16 @@
+{% extends "layouts/base.html" %}
+{% block title %} Filtered Publishers {% endblock %}
+
+{% block content %}
+<div style="margin: 20px;">
+    <h2>دور النشر (حسب الشروط المعقدة) 🎯</h2>
+    <hr>
+    <ul style="font-size: 18px; line-height: 2;">
+        {% for pub in publishers %}
+            <li><strong>{{ pub.name }}</strong>: لديه عدد ({{ pub.book_count }}) كتب تطابق الشروط.</li>
+        {% empty %}
+            <li>لا يوجد أي ناشر لديه كتب تطابق هذه الشروط الصعبة حالياً (السعر > 50 والكمية بين 1 و 4).</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

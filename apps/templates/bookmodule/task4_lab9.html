@@ -1,0 +1,20 @@
+{% extends "layouts/base.html" %}
+{% block title %} Publisher Prices {% endblock %}
+
+{% block content %}
+<div style="margin: 20px;">
+    <h2>إحصائيات أسعار الكتب لكل دار نشر 💰</h2>
+    <hr>
+    <ul style="font-size: 18px; line-height: 2;">
+        {% for pub in publishers %}
+            <li>
+                <strong>{{ pub.name }}:</strong><br>
+                - متوسط الأسعار: {{ pub.avg_price|default:0 }} ريال<br>
+                - أرخص كتاب: {{ pub.min_price|default:0 }} ريال<br>
+                - أغلى كتاب: {{ pub.max_price|default:0 }} ريال
+            </li>
+            <br>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

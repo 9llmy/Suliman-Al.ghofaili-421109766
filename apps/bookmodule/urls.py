@@ -21,4 +21,11 @@ urlpatterns = [
     path('lab8/task5/', views.task5, name="books.task5"),
     path('init-students/', views.init_students, name="books.init_students"),
     path('lab8/task7/', views.task7, name="books.task7"),
+    path('init-lab9/', views.init_lab9, name="books.init_lab9"),
+    path('lab9/task1/', views.task1_lab9, name="books.task1_lab9"),
+    path('lab9/task2/', views.task2_lab9, name="books.task2_lab9"),
+    path('lab9/task3/', views.task3_lab9, name="books.task3_lab9"),
+    path('lab9/task4/', views.task4_lab9, name="books.task4_lab9"),
+    path('lab9/task5/', views.task5_lab9, name="books.task5_lab9"),
+    path('lab9/task6/', views.task6_lab9, name="books.task6_lab9"),
 ]

@@ -4,6 +4,10 @@ from django.shortcuts import render
 from django.db.models import Count, Sum, Avg, Max, Min
 from .models import Book, Address, Student
 
+from .models import Book, Address, Student, Publisher, Author
+from django.utils import timezone
+from datetime import date
+
 def index(request):
     return render(request, "bookmodule/index.html")
 
@@ -135,3 +139,74 @@ def task7(request):
     # دالة annotate تقوم بجمع المدن وعدّ الطلاب المرتبطين بكل مدينة
     cities = Address.objects.annotate(student_count=Count('student'))
     return render(request, 'bookmodule/task7.html', {'cities': cities})
+
+def init_lab9(request):
+    Book.objects.all().delete()
+    Publisher.objects.all().delete()
+    Author.objects.all().delete()
+
+    # إضافة دور النشر
+    pub1 = Publisher.objects.create(name='دار القلم', location='دمشق')
+    pub2 = Publisher.objects.create(name='دار المنهاج', location='جدة')
+
+    # إضافة المؤلفين
+    auth1 = Author.objects.create(name='ابن قيم الجوزية', DOB=date(1292, 1, 1))
+    auth2 = Author.objects.create(name='الذهبي', DOB=date(1274, 10, 5))
+
+    # إضافة الكتب وربطها بالناشر
+    b1 = Book.objects.create(title='كتاب الداء والدواء', price=50.0, quantity=10, pubdate=timezone.now(), rating=5, publisher=pub1)
+    b1.authors.add(auth1) # ربط المؤلف بالكتاب
+
+    b2 = Book.objects.create(title='كتاب سير أعلام النبلاء', price=150.0, quantity=5, pubdate=timezone.now(), rating=5, publisher=pub2)
+    b2.authors.add(auth2)
+
+    return render(request, 'bookmodule/index.html')
+
+def task1_lab9(request):
+    # نحسب إجمالي كمية كل الكتب في المكتبة
+    total_quantity = Book.objects.aggregate(total=Sum('quantity'))['total'] or 0
+    
+    books = Book.objects.all()
+    # نمر على كل كتاب ونحسب نسبته المئوية (كحقل مؤقت)
+    for book in books:
+        if total_quantity > 0:
+            book.percentage = round((book.quantity / total_quantity) * 100, 2)
+        else:
+            book.percentage = 0.0
+            
+    return render(request, 'bookmodule/task1_lab9.html', {'books': books})
+
+def task2_lab9(request):
+    # نستخدم annotate عشان نحسب مجموع (Sum) حقل quantity للكتب المرتبطة بكل ناشر
+    # لاحظ أننا استخدمنا book__quantity للوصول لجدول الكتب من جدول الناشر
+    publishers = Publisher.objects.annotate(total_stock=Sum('book__quantity'))
+    return render(request, 'bookmodule/task2_lab9.html', {'publishers': publishers})
+
+def task3_lab9(request):
+    # نستخدم annotate عشان نجيب أقدم تاريخ نشر (Min) لكل دار نشر
+    publishers = Publisher.objects.annotate(oldest_book_date=Min('book__pubdate'))
+    return render(request, 'bookmodule/task3_lab9.html', {'publishers': publishers})
+
+def task4_lab9(request):
+    # حساب المتوسط (Avg)، أقل سعر (Min)، وأعلى سعر (Max) لكل ناشر
+    publishers = Publisher.objects.annotate(
+        avg_price=Avg('book__price'),
+        min_price=Min('book__price'),
+        max_price=Max('book__price')
+    )
+    return render(request, 'bookmodule/task4_lab9.html', {'publishers': publishers})
+
+def task5_lab9(request):
+    # أول شيء نفلتر الكتب اللي تقييمها 4 أو أعلى، بعدين نعدها لكل ناشر
+    publishers = Publisher.objects.filter(book__rating__gte=4).annotate(book_count=Count('book'))
+    return render(request, 'bookmodule/task5_lab9.html', {'publishers': publishers})
+
+def task6_lab9(request):
+    # نفلتر الكتب بناءً على الشروط المعقدة، ثم نعدّها لكل ناشر
+    publishers = Publisher.objects.filter(
+        book__price__gt=50,
+        book__quantity__lt=5,
+        book__quantity__gte=1
+    ).annotate(book_count=Count('book'))
+    
+    return render(request, 'bookmodule/task6_lab9.html', {'publishers': publishers})
