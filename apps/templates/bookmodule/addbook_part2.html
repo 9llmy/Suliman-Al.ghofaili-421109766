@@ -1,0 +1,18 @@
+{% extends "layouts/base.html" %}
+{% block title %} إضافة كتاب (Django Forms) {% endblock %}
+
+{% block content %}
+<div style="margin: 20px;">
+    <h2>إضافة كتاب جديد (بالطريقة الاحترافية ✨)</h2>
+    <hr>
+    <form method="POST" action="/books/lab9_part2/addbook/">
+        {% csrf_token %}
+        
+        <!-- هذا السطر السحري يطبع كل الحقول اللي في قاعدة البيانات بشكل تلقائي! -->
+        {{ form.as_p }} 
+        
+        <button type="submit" style="padding: 10px 20px; background-color: purple; color: white; border: none; cursor: pointer;">حفظ الكتاب</button>
+        <a href="/books/lab9_part1/listbooks/" style="margin-right: 15px; color: red; text-decoration: none;">إلغاء</a>
+    </form>
+</div>
+{% endblock content %}

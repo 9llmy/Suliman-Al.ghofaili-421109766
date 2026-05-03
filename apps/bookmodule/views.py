@@ -1,12 +1,11 @@
 from .models import Book
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Count, Sum, Avg, Max, Min
-from .models import Book, Address, Student
-
 from .models import Book, Address, Student, Publisher, Author
 from django.utils import timezone
 from datetime import date
+from .forms import BookForm
 
 def index(request):
     return render(request, "bookmodule/index.html")
@@ -210,3 +209,82 @@ def task6_lab9(request):
     ).annotate(book_count=Count('book'))
     
     return render(request, 'bookmodule/task6_lab9.html', {'publishers': publishers})
+
+def listbooks(request):
+    # جلب جميع الكتب من قاعدة البيانات
+    books = Book.objects.all()
+    return render(request, 'bookmodule/listbooks.html', {'books': books})
+
+def addbook(request):
+    if request.method == 'POST':
+        # استلام البيانات من الفورم
+        title = request.POST.get('title')
+        price = request.POST.get('price')
+        
+        # إنشاء كتاب جديد وحفظه مع إضافة تاريخ النشر الحالي لتفادي الخطأ
+        Book.objects.create(title=title, price=float(price), pubdate=timezone.now())
+        
+        # بعد الحفظ، نرجع المستخدم لصفحة عرض الكتب
+        return redirect('books.listbooks')
+    
+    # إذا كان الطلب GET، نعرض له صفحة الفورم
+    return render(request, 'bookmodule/addbook.html')
+
+def editbook(request, id):
+    # جلب الكتاب المطلوب من قاعدة البيانات باستخدام الـ ID
+    book = Book.objects.get(id=id)
+    
+    if request.method == 'POST':
+        # تحديث بيانات الكتاب بالبيانات الجديدة الجاية من الفورم
+        book.title = request.POST.get('title')
+        book.price = float(request.POST.get('price'))
+        
+        # حفظ التعديلات
+        book.save()
+        
+        # الرجوع لقائمة الكتب
+        return redirect('books.listbooks')
+    
+    # إذا كان الطلب GET، نعرض صفحة التعديل ونرسل لها بيانات الكتاب الحالية
+    return render(request, 'bookmodule/editbook.html', {'book': book})
+
+def deletebook(request, id):
+    # نجيب الكتاب من قاعدة البيانات باستخدام الـ ID
+    book = Book.objects.get(id=id)
+    
+    # نحذف الكتاب نهائياً
+    book.delete()
+    
+    # نرجع المستخدم لقائمة الكتب عشان يشوف أن الكتاب اختفى
+    return redirect('books.listbooks')
+
+def addbook_part2(request):
+    if request.method == 'POST':
+        # نمرر البيانات اللي جاتنا من المستخدم للفورم
+        form = BookForm(request.POST)
+        
+        # حارس الأمن (is_valid) يتأكد إن البيانات صحيحة 100%
+        if form.is_valid():
+            form.save()  # سطر واحد يحفظ البيانات في قاعدة البيانات!
+            return redirect('books.listbooks') # نرجع لقائمة الكتب مؤقتاً
+    else:
+        # إذا كان الطلب GET، نرسل فورم فاضي
+        form = BookForm()
+        
+    return render(request, 'bookmodule/addbook_part2.html', {'form': form})
+
+def editbook_part2(request, id):
+    # نجيب الكتاب اللي نبي نعدله
+    book = Book.objects.get(id=id)
+    
+    if request.method == 'POST':
+        # نمرر البيانات الجديدة، ونقول للجانغو "حدث هذا الكتاب بالذات" باستخدام instance
+        form = BookForm(request.POST, instance=book)
+        if form.is_valid():
+            form.save()
+            return redirect('books.listbooks') # نرجع للقائمة بعد الحفظ
+    else:
+        # إذا كان الطلب GET، نرسل الفورم معبأ ببيانات الكتاب الحالية
+        form = BookForm(instance=book)
+        
+    return render(request, 'bookmodule/editbook_part2.html', {'form': form, 'book': book})

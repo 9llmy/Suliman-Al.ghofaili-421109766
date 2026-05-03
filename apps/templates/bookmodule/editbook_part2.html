@@ -1,0 +1,19 @@
+{% extends "layouts/base.html" %}
+{% block title %} تعديل كتاب (Django Forms) {% endblock %}
+
+{% block content %}
+<div style="margin: 20px;">
+    <h2>تعديل بيانات كتاب: {{ book.title }} ✏️</h2>
+    <hr>
+    <!-- نرسل البيانات لنفس الرابط مع الـ ID -->
+    <form method="POST" action="/books/lab9_part2/editbook/{{ book.id }}/">
+        {% csrf_token %}
+        
+        <!-- سطر واحد يبني الفورم ويعبيه بالبيانات القديمة! -->
+        {{ form.as_p }}
+        
+        <button type="submit" style="padding: 10px 20px; background-color: orange; color: white; border: none; cursor: pointer;">حفظ التعديلات</button>
+        <a href="/books/lab9_part1/listbooks/" style="margin-right: 15px; color: red; text-decoration: none;">إلغاء</a>
+    </form>
+</div>
+{% endblock content %}
